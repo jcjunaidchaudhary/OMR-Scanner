@@ -1,5 +1,7 @@
 import cv2
 import numpy as np
+import pytesseract
+pytesseract.pytesseract.tesseract_cmd =r"C:/Program Files/Tesseract-OCR/tesseract.exe"
 
 def rectCounters(contours):
     rectCon=[]
@@ -52,6 +54,27 @@ def splitBoxes(img):
             boxes.append(box)
         # cv2.imshow("split",box)
     return boxes
+
+def splitBoxesForNumber(img):
+    rows=np.vsplit(img,5)
+    qNumber=[]
+    # innter_rows=np.vsplit(rows,5)
+    # cv2.imshow("split",rows[0])
+    # count=0
+    for r in rows:
+        cols=np.hsplit(r,5)
+        # for box in cols:
+
+        resized_image = cv2.resize(cols[0], None, fx=2, fy=1)
+        # cv2.imshow(f"splitNumber{count}",resized_image)
+        txt1 = pytesseract.image_to_string(resized_image, config="--psm 6 digits")
+
+        qNumber.append(int(txt1))
+        # count+=1
+    print(qNumber)
+
+    qNumber=[i for i in range(qNumber[-1]-4,qNumber[-1]+1)]
+    return qNumber
 
 def showAnswer(img,myIndex,grading,ans,questions,choices):
     secW=int(img.shape[1]/questions)

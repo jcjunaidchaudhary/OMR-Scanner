@@ -56,7 +56,12 @@ if firstContour.size!=0:
     imgWarpGray=cv2.cvtColor(imgWarpColored,cv2.COLOR_BGR2GRAY)
     imgThresh=cv2.threshold(imgWarpGray,80,250,cv2.THRESH_BINARY_INV)[1]
     
+    #for 2nd 
+    imgWarpGray2=cv2.cvtColor(imgWarp2,cv2.COLOR_BGR2GRAY)
+    imgThresh2=cv2.threshold(imgWarpGray2,145,260,cv2.THRESH_BINARY_INV)[1]
+    
     boxes=splitBoxes(imgThresh)
+    qNum=splitBoxesForNumber(imgWarpGray2)
     # cv2.imshow("Test", boxes[0])
     
     #getting nonzero values of each box
@@ -68,10 +73,10 @@ if firstContour.size!=0:
         myPixellVal[countR][countC]=totalPixels
         countC+=1
         if countC==choices: countR+=1 ; countC=0
-
-    print(myPixellVal)
-    myPixellVal = myPixellVal[:,1:]
+    
     # print(myPixellVal)
+    myPixellVal = myPixellVal[:,1:] #after removing 1st column 
+    print("myPixellVal",myPixellVal)
 
     #FINDING INDEX VALUES OF THE MARKINGS
     myIndex=[]
@@ -80,7 +85,7 @@ if firstContour.size!=0:
         myIndexVal=np.where(arr==np.amax(arr))
         # print(myIndexVal[0])
         myIndex.append(myIndexVal[0][0])
-    print(myIndex)
+    print("myIndex",myIndex)
 
 
     #GRADING 
@@ -122,15 +127,15 @@ if firstContour.size!=0:
 # cv2.imshow("Original2", imgBlur)
 # cv2.imshow("Original3", imgCanny)
 # cv2.imshow("Contours", imgContours)
-# cv2.imshow("Contours2", imgFirstContour)
-cv2.imshow("Warp", imgWarpColored)
+cv2.imshow("Contours2", imgFirstContour)
+# cv2.imshow("Warp", imgWarpColored)
 # cv2.imshow("Warp2", imgWarp2)
 # cv2.imshow("Threshold", imgThresh)
-# cv2.imshow("Threshold2", imgInvWrap)
-cv2.imshow("Image Final", imgFinal)
-# cv2.imshow("raw", imRawDrawing)
+# cv2.imshow("Threshold2", imgThresh2)
+# cv2.imshow("Image Final", imgFinal)
+# cv2.imshow("raw", rectCon[0])
 
 
 
 
-cv2.waitKey(0)
+cv2.waitKey(3000)

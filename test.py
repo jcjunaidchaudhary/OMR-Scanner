@@ -8,7 +8,8 @@ widthImg=550
 heightImg=800
 question=5
 choices=4+1
-ans=[2,0,0,1,3]
+# ans=[2,0,0,1,3]
+ans={26:2,27:0,28:0,29:1,30:3,31:2,32:0,33:1,34:3,35:0}
 
 
 ################################################################
@@ -61,7 +62,7 @@ if firstContour.size!=0:
     imgThresh2=cv2.threshold(imgWarpGray2,145,260,cv2.THRESH_BINARY_INV)[1]
     
     boxes=splitBoxes(imgThresh)
-    qNum=splitBoxesForNumber(imgWarpGray2)
+    qNum=splitBoxesForNumber(imgWarpGray)
     # cv2.imshow("Test", boxes[0])
     
     #getting nonzero values of each box
@@ -76,22 +77,34 @@ if firstContour.size!=0:
     
     # print(myPixellVal)
     myPixellVal = myPixellVal[:,1:] #after removing 1st column 
-    print("myPixellVal",myPixellVal)
+    # print("myPixellVal",myPixellVal)
 
     #FINDING INDEX VALUES OF THE MARKINGS
-    myIndex=[]
-    for x in range(question):
+    myAns={}
+    # myIndex=[]
+    for x in range(len(qNum)):
         arr=myPixellVal[x]
         myIndexVal=np.where(arr==np.amax(arr))
         # print(myIndexVal[0])
-        myIndex.append(myIndexVal[0][0])
-    print("myIndex",myIndex)
+        # myIndex.append(myIndexVal[0][0])
+        myAns[qNum[x]]=(myIndexVal[0][0])
+
+    # print("myIndex",myIndex)
+    print("myAns",myAns)
 
 
-    #GRADING 
+    # # GRADING 
+    # grading=[]
+    # for x in range(question):
+    #     if ans[x]==myIndex[x]:
+    #         grading.append(1)
+    #     else: grading.append(0)
+    # print(grading)  
+    
+    # GRADING 
     grading=[]
-    for x in range(question):
-        if ans[x]==myIndex[x]:
+    for x in myAns:
+        if ans[x]==myAns[x]:
             grading.append(1)
         else: grading.append(0)
     print(grading)  
@@ -102,14 +115,19 @@ if firstContour.size!=0:
     #DISPLAYING ANSWERS
 
     imgResult=imgWarpColored.copy()
-    imgResult=showAnswer(imgResult,myIndex,grading,ans,question,choices)
+    imgResult=showAnswer(imgResult,myAns,grading,ans,question,choices)
+    # imgResult2=showAnswer2(imgResult)
+
+    cv2.imshow("Result",imgResult)
     
     imRawDrawing=np.zeros_like(imgWarpColored)
-    imRawDrawing=showAnswer(imRawDrawing,myIndex,grading,ans,question,choices)
+    imRawDrawing=showAnswer(imRawDrawing,myAns,grading,ans,question,choices)
 
+    # cv2.imshow("...",imRawDrawing)
 
     invMatrix=cv2.getPerspectiveTransform(pt2,pt1)
     imgInvWrap=cv2.warpPerspective(imRawDrawing,invMatrix,(widthImg,heightImg))
+
     
     # imgRawGrade=np.zeros_like(imgGradeColored)
     # cv2.putText(imgRawGrade,str(int(score))+"%",(60,100),cv2.FONT_HERSHEY_COMPLEX,3,(0,255,255),3)
@@ -127,15 +145,15 @@ if firstContour.size!=0:
 # cv2.imshow("Original2", imgBlur)
 # cv2.imshow("Original3", imgCanny)
 # cv2.imshow("Contours", imgContours)
-cv2.imshow("Contours2", imgFirstContour)
+# cv2.imshow("Contours2", imgFirstContour)
 # cv2.imshow("Warp", imgWarpColored)
 # cv2.imshow("Warp2", imgWarp2)
 # cv2.imshow("Threshold", imgThresh)
 # cv2.imshow("Threshold2", imgThresh2)
-# cv2.imshow("Image Final", imgFinal)
+cv2.imshow("Image Final", imgFinal)
 # cv2.imshow("raw", rectCon[0])
 
 
 
 
-cv2.waitKey(3000)
+cv2.waitKey(5000)

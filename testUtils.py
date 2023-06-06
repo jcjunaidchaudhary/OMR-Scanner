@@ -76,16 +76,44 @@ def splitBoxesForNumber(img):
     qNumber=[i for i in range(qNumber[-1]-4,qNumber[-1]+1)]
     return qNumber
 
-def showAnswer(img,myIndex,grading,ans,questions,choices):
+# def showAnswer(img,myIndex,grading,ans,questions,choices):
+#     print("Question",questions)
+#     print("Choices",choices)
+#     secW=int(img.shape[1]/questions)
+#     secH=int(img.shape[0]/choices)
+
+#     for x in range(questions):
+#         myAns=myIndex[x]+1
+#         print(myAns,"Answer")
+#         cX=(myAns*secW)+secW//2
+#         cY=(x*secH)+secH//2
+
+#         if grading[x]==1:
+#             myColor=(0,255,0)
+#         else:
+#             myColor=(0,0,255)
+#             correctAns=ans[x]+1
+#             print ("correct",correctAns)
+#             dX=(correctAns*secW)+secW//2
+#             cv2.circle(img,(dX,cY),15,(0,255,0),cv2.FILLED)
+
+#         cv2.circle(img,(cX,cY),15,myColor,cv2.FILLED)
+
+#     return img
+
+def showAnswer(img,myAnswer,grading,ans,questions,choices):
+    questions=5
+
     secW=int(img.shape[1]/questions)
     secH=int(img.shape[0]/choices)
 
-    for x in range(questions):
-        myAns=myIndex[x]+1
+    indx=0
+    for x in myAnswer:
+        myAns=myAnswer[x]+1
         cX=(myAns*secW)+secW//2
-        cY=(x*secH)+secH//2
+        cY=(indx*secH)+secH//2
 
-        if grading[x]==1:
+        if grading[indx]==1:
             myColor=(0,255,0)
         else:
             myColor=(0,0,255)
@@ -94,5 +122,7 @@ def showAnswer(img,myIndex,grading,ans,questions,choices):
             cv2.circle(img,(dX,cY),15,(0,255,0),cv2.FILLED)
 
         cv2.circle(img,(cX,cY),15,myColor,cv2.FILLED)
-
+        indx+=1
     return img
+
+

@@ -64,8 +64,11 @@ def splitBoxesForNumber(img):
         cols=np.hsplit(r,5)
         resized_image = cv2.resize(cols[0], None, fx=2, fy=1)
         
-        cv2.imshow(f"splitNumber{count}",resized_image)
-        print("Shape of the image", resized_image.shape)
+        
+        # print("Shape of the image", resized_image.shape)
+        resized_image = resized_image[:, 9:]  
+        
+        # cv2.imshow(f"splitNumber{count}",resized_image)
         
         txt1 = pytesseract.image_to_string(resized_image, config="--psm 6 digits")
         print(txt1)

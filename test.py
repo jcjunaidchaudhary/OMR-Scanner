@@ -43,11 +43,11 @@ firstContour=getCornerPoints(rectCon[0])
 count=0
 for contour in rectCon:
     print(count,".............................")
-    if count%2!=0:
-        count+=1
-        continue
-    if count>6:
-        break
+    # if count%2!=0:
+    #     count+=1
+    #     continue
+    # if count>6:
+    #     break
 # if count==0:
 #     contour=getCornerPoints(rectCon[2])
     # print("============")

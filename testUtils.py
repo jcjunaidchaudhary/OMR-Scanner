@@ -8,7 +8,7 @@ def rectCounters(contours):
     for i in contours:
         area =cv2.contourArea(i)
        
-        if area>100:
+        if area>10000:
             peri = cv2.arcLength(i,True)
             approx = cv2.approxPolyDP(i,0.02*peri,True)
             # print("Corner Points",len(approx))
@@ -58,22 +58,29 @@ def splitBoxes(img):
 def splitBoxesForNumber(img):
     rows=np.vsplit(img,5)
     qNumber=[]
-    # innter_rows=np.vsplit(rows,5)
     # cv2.imshow("split",rows[0])
-    # count=0
+    count=0
     for r in rows:
         cols=np.hsplit(r,5)
-        # for box in cols:
-
         resized_image = cv2.resize(cols[0], None, fx=2, fy=1)
-        # cv2.imshow(f"splitNumber{count}",resized_image)
+        
+        cv2.imshow(f"splitNumber{count}",resized_image)
+        print("Shape of the image", resized_image.shape)
+        
         txt1 = pytesseract.image_to_string(resized_image, config="--psm 6 digits")
-
-        qNumber.append(int(txt1))
-        # count+=1
+        print(txt1)
+        
+        try:
+            qNumber.append(int(txt1))
+        except:
+            pass
+        
+        count+=1
+    
     print(qNumber)
 
     qNumber=[i for i in range(qNumber[-1]-4,qNumber[-1]+1)]
+    
     return qNumber
 
 # def showAnswer(img,myIndex,grading,ans,questions,choices):

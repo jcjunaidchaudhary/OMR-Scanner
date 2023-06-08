@@ -45,9 +45,6 @@ def recorder(myPoints):
 def splitBoxes(img):
     rows=np.vsplit(img,5)
     boxes=[]
-    # innter_rows=np.vsplit(rows,5)
-    # cv2.imshow("split",rows[0])
-    # cv2.imshow("split2",innter_rows[1])
     for r in rows:
         cols=np.hsplit(r,5)
         for box in cols:
@@ -64,17 +61,16 @@ def splitBoxesForNumber(img):
         cols=np.hsplit(r,5)
         resized_image = cv2.resize(cols[0], None, fx=2, fy=1)
         
-        
         # print("Shape of the image", resized_image.shape)
         resized_image = resized_image[:, 9:]  
         
         # cv2.imshow(f"splitNumber{count}",resized_image)
         
         txt1 = pytesseract.image_to_string(resized_image, config="--psm 6 digits")
-        print(txt1)
+        # print(txt1)
         
         try:
-            qNumber.append(int(txt1))
+            qNumber.append(abs(int(txt1)))
         except:
             pass
         
@@ -85,31 +81,6 @@ def splitBoxesForNumber(img):
     qNumber=[i for i in range(qNumber[-1]-4,qNumber[-1]+1)]
     
     return qNumber
-
-# def showAnswer(img,myIndex,grading,ans,questions,choices):
-#     print("Question",questions)
-#     print("Choices",choices)
-#     secW=int(img.shape[1]/questions)
-#     secH=int(img.shape[0]/choices)
-
-#     for x in range(questions):
-#         myAns=myIndex[x]+1
-#         print(myAns,"Answer")
-#         cX=(myAns*secW)+secW//2
-#         cY=(x*secH)+secH//2
-
-#         if grading[x]==1:
-#             myColor=(0,255,0)
-#         else:
-#             myColor=(0,0,255)
-#             correctAns=ans[x]+1
-#             print ("correct",correctAns)
-#             dX=(correctAns*secW)+secW//2
-#             cv2.circle(img,(dX,cY),15,(0,255,0),cv2.FILLED)
-
-#         cv2.circle(img,(cX,cY),15,myColor,cv2.FILLED)
-
-#     return img
 
 def showAnswer(img,myAnswer,grading,ans,questions,choices):
     questions=5
@@ -125,6 +96,13 @@ def showAnswer(img,myAnswer,grading,ans,questions,choices):
 
         if grading[indx]==1:
             myColor=(0,255,0)
+
+        elif grading[indx]==2:
+            myColor=(0,255,255)
+            correctAns=ans[x]+1
+            dX=(correctAns*secW)+secW//2
+            cv2.circle(img,(dX,cY),15,(0,255,255),cv2.FILLED)
+
         else:
             myColor=(0,0,255)
             correctAns=ans[x]+1
